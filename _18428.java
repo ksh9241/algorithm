@@ -19,11 +19,11 @@ public class Main {
 			}
 		}
 		
-		backTraking(0,0,0);
+		backTraking(0);
 		
 		System.out.println("NO");
 	}
-	static void backTraking (int x, int y, int depth) {
+	static void backTraking (int depth) {
 		if (depth == 3) {
 			boolean chk = true;
 			
@@ -49,7 +49,7 @@ public class Main {
 			for (int j = 0; j < N; j++) {
 				if ("X".equals(CLASS[i][j])) {
 					CLASS[i][j] = "O";
-					backTraking(i, j, depth + 1);
+					backTraking(depth + 1);
 					CLASS[i][j] = "X";
 				}
 			}

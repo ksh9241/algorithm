@@ -77,9 +77,9 @@ public class Main {
 			int x = t[0];
 			int y = t[1];
 			
-			if (!tmp[x][y]) c++;
+//			if (!tmp[x][y])	
+				c++;
 			
-			visit[x][y] = true;
 			tmp[x][y] = true;
 			roomCheck(x, y);
 		}
@@ -106,8 +106,9 @@ public class Main {
 			if ((num & compass[i]) != compass[i]) {
 				int nxtX = x + dx[i];
 				int nxtY = y + dy[i];
-				if (!tmp[nxtX][nxtY]) {
+				if (!tmp[nxtX][nxtY] && !visit[nxtX][nxtY]) {
 					q.add(new int[] {nxtX, nxtY});
+					visit[nxtX][nxtY] = true;
 				}
 			}
 		}

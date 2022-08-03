@@ -1,34 +1,43 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+
 public class Main {
     static int N, M;
     static int[][] map;
     static boolean[][] chk;
+
     static int answer = Integer.MAX_VALUE;
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+
         map = new int[N][M];
         int[][] visit = new int[N][M];
         chk = new boolean[N][M];
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 visit[i][j] = map[i][j];
             }
         }
-        quest(0, 0, visit);
+
+        quest(0, visit);
         System.out.println(answer);
     }
-    static void quest(int x, int y, int[][] visit) {
+
+    static void quest(int x, int[][] visit) {
         for (int i = x; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (!chk[i][j] && !(map[i][j] == 0 || map[i][j] == 6)) {
@@ -40,6 +49,7 @@ public class Main {
         }
         answer(visit);
     }
+
     static int[][] copyArr(int[][] to, int[][] from) {
         for (int i = 0; i < to.length; i++) {
             for (int j = 0; j < to[i].length; j++) {
@@ -48,13 +58,14 @@ public class Main {
         }
         return from;
     }
+
     static void check(int x, int y, int number, int[][] visit) {
         int[][] copy = new int[N][M];
         // 한방향
         if (number == 1) {
             for (int i = 1; i <= 4; i++) {
                 copy = copyArr(visit, copy);
-                quest(x, y, questType(x, y, visit, i));
+                quest(x, questType(x, y, visit, i));
                 visit = copyArr(copy, visit);
             }
         }
@@ -62,34 +73,36 @@ public class Main {
         else if (number == 2) {
             for (int i = 1; i <= 2; i++) {
                 copy = copyArr(visit, copy);
-                quest(x, y, questType(x, y, visit, i, i + 2));
+                quest(x, questType(x, y, visit, i, i + 2));
                 visit = copyArr(copy, visit);
             }
+
         }
         // ㄱ자
         else if (number == 3) {
             for (int i = 1; i <= 4; i++) {
                 int nxtNum = (i % 4) + 1;
                 copy = copyArr(visit, copy);
-                quest(x, y, questType(x, y, visit, i, nxtNum));
+                quest(x, questType(x, y, visit, i, nxtNum));
                 visit = copyArr(copy, visit);
             }
         }
         // 3방향
         else if (number == 4) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 1; i <= 4; i++) {
                 int nxtNum = (i % 4) + 1;
                 int nxtNum2 = i + 2 > 4 ? i + 2 - 4 : i + 2;
                 copy = copyArr(visit, copy);
-                quest(x, y, questType(x, y, visit, i, nxtNum, nxtNum2));
+                quest(x, questType(x, y, visit, i, nxtNum, nxtNum2));
                 visit = copyArr(copy, visit);
             }
         }
         // 십자
         else if (number == 5) {
-            quest(x, y, questType(x, y, visit, 1, 2, 3, 4));
+            quest(x, questType(x, y, visit, 1, 2, 3, 4));
         }
     }
+
     // 방향 전체 탐색 : 1 = 왼쪽, 2 = 위쪽, 3 = 오른쪽, 4 = 아래
     static int[][] questType(int x, int y, int[][] visit, int... type) {
         for (int i = 0; i < type.length; i++) {
@@ -148,6 +161,7 @@ public class Main {
         }
         return visit;
     }
+
     // 루프 끝나면 최소값 비교
     private static void answer(int[][] visit) {
         int count = 0;

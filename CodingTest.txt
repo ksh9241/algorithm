@@ -1,0 +1,48 @@
+/* 1번
+*  String s = "111999333";
+        int answer = -1;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length() - 1; i++) {
+            String val = s.substring(i, i + 1);
+            String nxtVal =  s.substring(i + 1, i + 2);
+            if (i == 0) {
+                sb.append(val);
+            }
+            if (val.equals(nxtVal)) {
+                sb.append(nxtVal);
+            } else {
+                if (sb.toString().length() >= 3 ) {
+                    answer = Math.max(answer, Integer.parseInt(sb.toString()));
+                }
+                sb = new StringBuilder();
+                sb.append(nxtVal);
+            }
+        }
+        System.out.println(answer);
+* */
+
+/* 3번
+* public class Main {
+    static int maxVal = Integer.MIN_VALUE;
+    public static void main(String[] args) throws Exception {
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int[][] dungeons = {{700,266},{111,78},{871,655}};
+        boolean[] visit = new boolean[dungeons.length];
+        int k = 966;
+
+        quest(dungeons, k, visit, 0);
+        System.out.println(maxVal);
+    }
+
+    static void quest(int[][] a, int k, boolean[] visit, int count) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i][0] <= k && !visit[i]) {
+                visit[i] = true;
+                quest(a, k - a[i][1], visit, count + 1);
+                visit[i] = false;
+            }
+        }
+        maxVal = Math.max(maxVal, count);
+    }
+}
+* */

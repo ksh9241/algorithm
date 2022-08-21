@@ -50,6 +50,7 @@ public class Main {
         }
     }
 
+    // 조건처리를 좀 수정해야됨.
     static void check (int x, int y, int type, int depth, List<Integer>list) {
         for (int i = list.size() - 1; i >= 0; i--) {
             int dir = list.get(i);

@@ -4,8 +4,10 @@ import java.util.*;
 
 public class Main {
 
-    static int[][] map = new int[100][100];
+    //    static int[][] map = new int[100][100];
+    static int[][] map = new int[101][101];
     static int N;
+    static int count = 0;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
@@ -24,11 +26,8 @@ public class Main {
             check(x, y, type, 0, list);
         }
 
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == 1) System.out.println(i + " " + j);
-            }
-        }
+        counting();
+        System.out.println(count);
     }
 
     static void quest(int x, int y, int dir) {
@@ -50,7 +49,6 @@ public class Main {
         }
     }
 
-    // 조건처리를 좀 수정해야됨.
     static void check (int x, int y, int type, int depth, List<Integer>list) {
         for (int i = list.size() - 1; i >= 0; i--) {
             int dir = list.get(i);
@@ -64,7 +62,7 @@ public class Main {
                     x = x - 1;
                     break;
                 case 2 :
-                    y = y + 1;
+                    y = y - 1;
                     break;
                 case 3 :
                     x = x + 1;
@@ -78,5 +76,18 @@ public class Main {
             return;
         }
         check(x, y, type, depth + 1, list);
+    }
+
+    static void counting() {
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+
+                if (map[i][j] == 1) {
+                    if (map[i][j + 1] == 1 && map[i + 1][j] == 1 && map[i + 1][j + 1] == 1) {
+                        count++;
+                    }
+                }
+            }
+        }
     }
 }

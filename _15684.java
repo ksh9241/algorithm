@@ -48,32 +48,23 @@ public class Main {
 
             // 왼쪽탐색 가능할 때
             if (y - 1 > 0 && map[x][y - 1] == 0) {
-                int[][] copyMap = copyMap(map);
-                copyMap[x][y - 1] = y;
-                copyMap[x][y] = y - 1;
-                quest(x + 1, y - 1, num, count + 1, copyMap);
+                map[x][y - 1] = y;
+                map[x][y] = y - 1;
+                quest(x + 1, y - 1, num, count + 1, map);
+                map[x][y] = 0;
+                map[x][y - 1] = 0;
             }
 
             // 오른탐색 가능할 때
             if (y + 1 <= N && map[x][y + 1] == 0) {
-                int[][] copyMap = copyMap(map);
-                copyMap[x][y + 1] = y;
-                copyMap[x][y] = y + 1;
-                quest(x + 1, y + 1, num, count + 1, copyMap);
+                map[x][y + 1] = y;
+                map[x][y] = y + 1;
+                quest(x + 1, y + 1, num, count + 1, map);
+                map[x][y + 1] = 0;
+                map[x][y] = 0;
             }
         } else  if (x <= H && map[x][y] != 0) {
             quest(x + 1, map[x][y], num, count, map);
         }
-    }
-
-    static int[][] copyMap(int[][] map) {
-        int[][] copyMap = new int[map.length][map[0].length];
-
-        for (int i = 1; i < map.length; i++) {
-            for (int j = 1; j < map[i].length ; j++) {
-                copyMap[i][j] = map[i][j];
-            }
-        }
-        return copyMap;
     }
 }

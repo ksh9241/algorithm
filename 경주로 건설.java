@@ -44,26 +44,12 @@ class Solution {
                 continue;
             }
 
-            int nextDirection = direction(dx[i], dy[i]);
+            int nextDirection = i + 1;
             if (direction > 0 && direction != nextDirection) {
                 dfs(nxtX, nxtY, cost + 6, nextDirection, board);
             } else {
                 dfs(nxtX, nxtY, cost + 1, nextDirection, board);
             }
-        }
-    }
-
-    public int direction(int x, int y) {
-        if (x == 0) {
-            if (y > 0) {
-                return 3;
-            } else {
-                return 4;
-            }
-        } else if (x > 0) {
-            return 1;
-        } else {
-            return 2;
         }
     }
 }

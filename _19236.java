@@ -28,23 +28,88 @@ public class Main {
             }
         }
 
-        shuffle(map);
+        shuffle(map, visit, new int[]{0,0});
 
         Fish shark = map[0][0];
+        // 밥먹을 시간 최초 인입 경우의 수 최대 3개밖에 없음.
+        for (int i = 0; i < 3; i++) {
+            int nxtX = 0;
+            int nxtY = 0;
 
-        for (Fish[] ff : map) {
-            for (Fish f : ff) {
-                System.out.print(f.num + " ");
-            }
+            nxtX += dx[shark.direction];
+            nxtY += dy[shark.direction];
+            System.out.println("시작");
+            info(map, visit);
             System.out.println();
+            quest (nxtX, nxtY, map.clone(), visit.clone(), 0, shark.direction);
         }
 
-
-        quest(0, 0, map.clone(), 0);
         System.out.println(answer);
     }
 
-    private static void shuffle(Fish[][] map) {
+    private static void info (Fish[][] map, boolean[][] visit) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (!visit[i][j]) {
+                    System.out.print(map[i][j].num + print(map[i][j].direction) + " ");
+                }
+                else {
+                    System.out.print("먹힘 ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    private static void quest(int x, int y, Fish[][]map, boolean[][] visit, int score, int shark) {
+        // 상어가 이동할 백트래킹 구현
+        boolean shuffleCheck = true;
+        // 4 x 4 최대 3회만 반복
+        int nxtX = x;
+        int nxtY = y;
+        for (int i = 0; i < 3; i++) {
+            nxtX += dx[shark];
+            nxtY += dy[shark];
+
+            if (check(nxtX, nxtY, visit)) {
+                shuffleCheck = false;
+                visit[nxtX][nxtY] = true;
+                quest(nxtX, nxtY, map, visit, score + getScore(nxtX, nxtY, map), map[nxtX][nxtY].direction);
+                visit[nxtX][nxtY] = false;
+            }
+        }
+
+        // 상어가 먹을 곳이 없을 때 다시 셔플
+        if (shuffleCheck) {
+            // 셔플 후 먹을 곳 있을때만 다시 탐색
+            shuffle(map, visit, new int[]{x, y});
+
+            boolean questCheck = false;
+            int chkX = x;
+            int chkY = y;
+            for (int i = 0; i < 3; i++) {
+                chkX += dx[shark];
+                chkY += dy[shark];
+                if (check(chkX, chkY, visit)) {
+                    questCheck = true;
+                    break;
+                }
+            }
+            if (questCheck) {
+                quest(x, y, map, visit, score, shark);
+            } else {
+
+                answer = Math.max(score, answer);
+                return;
+            }
+        }
+    }
+
+    private static int getScore(int x, int y, Fish[][] map) {
+        return map[x][y].num;
+    }
+
+    private static void shuffle(Fish[][] map, boolean[][] visit, int[] sharkIdx) {
         int idx = 1;
         while (idx <= 16) {
             boolean v = false;
@@ -52,8 +117,8 @@ public class Main {
                 for (int j = 0; j < 4; j++) {
                     Fish f = map[i][j];
                     if (f.num == idx) {
-                        if ( !visit[i][j] ) {
-                            process(i, j, map);
+                        if ( !(i == sharkIdx[0] && j == sharkIdx[1]) ) {
+                            process(i, j, map, visit);
                         }
                         idx++;
                         v = true;
@@ -70,31 +135,58 @@ public class Main {
         }
     }
 
-    private static void quest(int x, int y, Fish[][]map, int score) {
-
-    }
-
-    private static void process(int x, int y, Fish[][] map) {
+    private static void process(int x, int y, Fish[][] map, boolean[][] visit) {
         Fish f = map[x][y];
 
         for (int i = 0; i < dx.length; i++) {
             int nxtX = dx[(f.direction + i) % 8] + x;
             int nxtY = dy[(f.direction + i) % 8] + y;
 
-            if (nxtX < 4 && nxtY < 4 && nxtX >= 0 && nxtY >= 0 && !visit[nxtX][nxtY]) {
+            if (check(nxtX, nxtY, visit)) {
                 Fish to = map[nxtX][nxtY];
                 map[x][y] = to;
+                f.direction = (f.direction + i) % 8;
                 map[nxtX][nxtY] = f;
+
+                boolean tmp = visit[x][y];
+                visit[x][y] = visit[nxtX][nxtY];
+                visit[nxtX][nxtY] = tmp;
                 break;
             }
         }
     }
 
+    private static boolean check (int x, int y, boolean[][] visit) {
+        return x < 4 && y < 4 && x >= 0 && y >= 0 && !visit[x][y];
+    }
+
+    private static String print(int num) {
+        switch(num) {
+            case 0 :
+                return "↑";
+            case 1 :
+                return "↖";
+            case 2 :
+                return "←";
+            case 3 :
+                return "↙";
+            case 4 :
+                return "↓";
+            case 5 :
+                return "↘";
+            case 6 :
+                return "→";
+            case 7 :
+                return "↗";
+        }
+        return null;
+    }
+
 }
 
 /*
-* 1번부터
-* ↑, ↖, ←, ↙, ↓, ↘, →, ↗
+ * 1번부터
+ * ↑, ↖, ←, ↙, ↓, ↘, →, ↗
  * */
 class Fish {
     int num;
@@ -105,4 +197,3 @@ class Fish {
         this.direction = direction;
     }
 }
-

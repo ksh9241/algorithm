@@ -54,7 +54,8 @@ public class Main {
 
             // 종료조건
             if (x == endX && y == endY) {
-                answer = Math.min(answer, minCheck[x][y]);
+                answer = minCheck[x][y];
+                q = new LinkedList<>();
                 break;
             }
 
@@ -81,12 +82,12 @@ public class Main {
 
                 // 맵 범위 체크
                 if ( check(nxtX, nxtY)) {
-                    if ("#".equals(map[nxtX][nxtY])) {
+                    if ("#".equals(map[nxtX][nxtY]) || minCheck[nxtX][nxtY] < time + 1) {
                         break;
                     }
 
                     // minCheck 위치 체크
-                    if (minCheck[nxtX][nxtY] > time) {
+                    if (minCheck[nxtX][nxtY] == Integer.MAX_VALUE) {
                         minCheck[nxtX][nxtY] = time + 1;
                         q.add(new int[]{nxtX, nxtY});
                     }

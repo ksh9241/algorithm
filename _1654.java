@@ -19,17 +19,29 @@ public class Main {
 
         Collections.sort(list, Collections.reverseOrder());
 
-        int maxLen = list.get(0);
-        int minLen = 0;
+        long maxLen = list.get(0);
+        long minLen = 1;
 
         boolean check = true;
 
-        int answer = 0;
+        long answer = 0;
+
+        long value = maxLen;
+        int count = 0;
+
+        for (int i = 0; i < list.size(); i++)
+        {
+            count += list.get(i) / value;
+        }
+
+        if (count >= totalCount) {
+            answer = Math.max(answer, value);
+        }
 
         while (check)
         {
-            int value = (maxLen + minLen) / 2;
-            int count = 0;
+            value = (maxLen + minLen) / 2;
+            count = 0;
 
             for (int i = 0; i < list.size(); i++)
             {
@@ -40,9 +52,12 @@ public class Main {
                 maxLen = value;
             }
 
-            if (count > totalCount) {
-                minLen = value;
+            if (count >= totalCount) {
                 answer = Math.max(answer, value);
+                if (minLen == value) {
+                    value++;
+                }
+                minLen = value;
             }
 
             if (minLen >= maxLen) {
@@ -50,34 +65,6 @@ public class Main {
             }
         }
 
-        System.out.println(maxLen);
-     }
+        System.out.println(answer);
+    }
 }
-
-/*
-3 3
-1000
-1000
-1
-
-1 1
-1
-
-5 5
-2
-2
-2
-2
-2
-
-1 3
-3
-
-3 4
-2
-6
-19
-
-answer : 6
-* */
-

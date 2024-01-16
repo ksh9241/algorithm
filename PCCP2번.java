@@ -4,48 +4,65 @@ class Solution {
     int[] dx = {0, 1, 0, -1};
     int[] dy = {1, 0, -1, 0};
     
+    boolean[][] visit; 
+    int[][] oilLand;
     public int solution(int[][] land) {
         int answer = 0;
-        
-        // 시추관을 설치할 y값
-        for (int i = 0; i < land[0].length; i++) {
-            int totalCount = 0;
-            boolean[][] visit = new boolean[land.length][land[0].length];
-            
-            // 시추관 작업
-            for (int j = 0; j < land.length; j++) {
-                if (land[j][i] == 1 && !visit[j][i]) {
-                    totalCount += quest(land, visit, new int[]{j, i}); 
+        visit = new boolean[land.length][land[0].length];
+        oilLand = new int[land.length][land[0].length];
+
+        Map<Integer, Integer> oil = new HashMap<>();
+        int oilId = 1;
+        for (int i = 0; i < land.length; i++) {
+            for (int j = 0; j < land[i].length; j++) {
+                if (land[i][j] == 1 && !visit[i][j]) {
+                    int size = quest(land, new int[]{i, j}, oilId); 
+                    oil.put(oilId, size);
+                    oilId++;
                 }
             }
-            
-            // 최대값 설정
-            answer = Math.max(answer, totalCount);
+        }
+
+        int[] arr = new int[land[0].length];
+        for (int i = 0; i < land[0].length; i++) {
+            Set<Integer> set = new HashSet<>();
+            for (int j = 0; j < land.length; j++) {
+                if (land[j][i] == 1) {
+                    set.add(oilLand[j][i]);
+                }
+            }
+
+            int totalCount = 0;
+            for (int k : set) {
+                totalCount += oil.get(k);
+            }
+            arr[i] = totalCount;
+        }
+
+        for (int maxNum : arr) {
+            answer = Math.max(answer, maxNum);
         }
         
         return answer; 
     }
     
-    public int quest(int[][] land, boolean[][] visit, int[] idx) {
+    public int quest(int[][] land, int[] idx, int oilId) {
         Queue<int[]> q = new LinkedList<>();
         q.add(idx);
 
         int result = 0;
-        
-        if (visit[idx[0]][idx[1]]) {
-            return result;
-        }
 
         while (!q.isEmpty()) {
             int[] arr = q.poll();
             int x = arr[0];
             int y = arr[1];
-            
+
             if (visit[x][y]) {
                 continue;
             }
-            
+
             visit[x][y] = true;
+            oilLand[x][y] = oilId;
             result++;
 
             for (int i = 0; i < 4; i++) {

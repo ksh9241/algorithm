@@ -59,7 +59,7 @@ class Solution {
 
         return answer;
     }
-    public void dfs(int startIdx, int idx, boolean tooIdx) {
+    public void dfs(int startIdx, int idx, boolean twoIdx) {
 
         // 막대 그래프
         if (list.get(idx).size() == 0 && !check) {
@@ -79,14 +79,14 @@ class Solution {
             }
 
             // 8자 그래프
-            if (flag && tooIdx) {
+            if (flag && twoIdx) {
                 eightCount++;
                 donutCount--;
                 check = true;
                 return;
             }
             // 도넛그래프
-            if (flag && !tooIdx) {
+            if (flag && !twoIdx) {
                 check = true;
                 return;
             }
@@ -94,13 +94,13 @@ class Solution {
 
         if (!check) {
             if (list.get(idx).size() == 2) {
-                tooIdx = true;
+                twoIdx = true;
             }
             for (int i = 0; i < list.get(idx).size(); i++) {
                 int nxtIdx = list.get(idx).get(i);
                 if (!visit[nxtIdx] || startIdx == nxtIdx) {
                     visit[nxtIdx] = true;
-                    dfs(startIdx, nxtIdx, tooIdx);
+                    dfs(startIdx, nxtIdx, twoIdx);
                 }
             }
         }

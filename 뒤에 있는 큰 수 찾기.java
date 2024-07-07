@@ -3,7 +3,6 @@ import java.util.*;
 class Solution {
     int[] answer;
     Stack<Integer> stack = new Stack<>();
-    
     public int[] solution(int[] numbers) {
         answer = new int[numbers.length];
         
